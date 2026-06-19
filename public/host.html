@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OK Quest Host</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a href="/" class="brand">OK Quest</a>
+      <span>TV Host Screen</span>
+    </header>
+
+    <main class="host-grid">
+      <section class="panel" id="setupPanel">
+        <h1>Create Game Room</h1>
+        <label>Game Mode
+          <select id="mode">
+            <option>Family Mode</option>
+            <option>Big Family Mode</option>
+            <option>Team Mode</option>
+            <option>Learning Theme Mode</option>
+          </select>
+        </label>
+        <label>Theme
+          <select id="theme">
+            <option>Mixed Family Quest</option>
+            <option>Science Night</option>
+            <option>Bible Heroes</option>
+            <option>Future Careers</option>
+            <option>Life in the UK</option>
+          </select>
+        </label>
+        <button class="button primary" id="createRoomButton">Create Room</button>
+      </section>
+
+      <section class="panel room-card hidden" id="roomPanel">
+        <p class="eyebrow">Room Code</p>
+        <div class="room-code" id="roomCode">----</div>
+        <img id="qrCode" alt="Join QR code">
+        <p id="joinUrl"></p>
+      </section>
+
+      <section class="panel wide">
+        <div class="split-heading">
+          <h2>Waiting Lobby</h2>
+          <button class="button" id="startButton" disabled>Start Game</button>
+        </div>
+        <div class="players" id="players"></div>
+      </section>
+
+      <section class="panel wide" id="gamePanel">
+        <div class="split-heading">
+          <h2>Game Show</h2>
+          <div class="mini-actions">
+            <button class="button" id="revealButton" disabled>Reveal Answer</button>
+            <button class="button" id="nextButton" disabled>Next Question</button>
+            <button class="button danger" id="endButton" disabled>End Game</button>
+          </div>
+        </div>
+        <div id="questionArea" class="question-area empty">Create a room, invite players, then start the quest.</div>
+        <div class="scoreboards">
+          <div>
+            <h3>Leaderboard</h3>
+            <ol id="leaderboard"></ol>
+          </div>
+          <div>
+            <h3>Team Scores</h3>
+            <ul id="teamScores"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/host.js"></script>
+  </body>
+</html>

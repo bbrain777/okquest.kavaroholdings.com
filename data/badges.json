@@ -1,0 +1,22 @@
+[
+  {
+    "id": "science-explorer",
+    "name": "Science Explorer",
+    "description": "Awarded for curiosity in science questions."
+  },
+  {
+    "id": "tech-genius",
+    "name": "Tech Genius",
+    "description": "Awarded for strong technology answers."
+  },
+  {
+    "id": "kindness-champion",
+    "name": "Kindness Champion",
+    "description": "Awarded for moral courage and thoughtful answers."
+  },
+  {
+    "id": "bible-hero",
+    "name": "Bible Hero",
+    "description": "Awarded for faith and scripture knowledge."
+  }
+]

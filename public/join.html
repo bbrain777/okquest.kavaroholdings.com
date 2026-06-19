@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Join OK Quest</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="phone-panel">
+      <p class="eyebrow">Join The Quest</p>
+      <h1>Player Registration</h1>
+      <form id="joinForm">
+        <label>Room Code <input id="roomCode" required maxlength="4"></label>
+        <label>Full Name <input id="fullName" required></label>
+        <label>Nickname <input id="nickname"></label>
+        <label>Age <input id="age" type="number" min="3" max="120"></label>
+        <label>Role/Relationship <input id="role" placeholder="Son, Auntie, Friend..."></label>
+        <label>Team <input id="team" placeholder="Green Team"></label>
+        <label>Favourite Subject <input id="favouriteSubject" placeholder="Science"></label>
+        <label>Difficulty
+          <select id="difficulty">
+            <option>Auto</option>
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
+          </select>
+        </label>
+        <label>Avatar Emoji <input id="avatar" maxlength="4" value="⭐"></label>
+        <button class="button primary" type="submit">Join Game</button>
+      </form>
+      <p id="message" class="message"></p>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/join.js"></script>
+  </body>
+</html>
