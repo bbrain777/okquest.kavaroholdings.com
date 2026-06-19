@@ -261,6 +261,10 @@ function clean(value) {
   return String(value || "").trim();
 }
 
-server.listen(PORT, () => {
-  console.log(`OK Quest is running at http://localhost:${PORT}`);
-});
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  server.listen(PORT, () => {
+    console.log(`OK Quest is running at http://localhost:${PORT}`);
+  });
+}
