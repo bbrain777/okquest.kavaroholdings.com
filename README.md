@@ -63,4 +63,4 @@ http://YOUR-LAPTOP-IP:3000/join.html
 
 ## Production Hosting Note
 
-The app uses Socket.io for live multiplayer rooms. For reliable production play, deploy the Node server to a persistent web service host such as Render. This repo includes `render.yaml` and more detail in `DEPLOYMENT.md`.
+The app uses Socket.io for live multiplayer rooms. For reliable production play, deploy the Node server to a persistent web service host. If you do not want to pay anything, see `FREE_HOSTING.md` for the no-cost path.

@@ -10,9 +10,11 @@ https://okquestkavaroholdingscom.vercel.app
 
 Vercel can serve the pages and API endpoint, but this app uses Socket.io for live rooms, phones, and TV updates. That needs a persistent Node process for reliable production play.
 
-## Recommended Multiplayer Host: Render
+## Recommended Multiplayer Host: Persistent Node Web Service
 
 This repo includes `render.yaml`, a Render Blueprint file. Render web services support inbound WebSocket connections, which is what Socket.io needs for the live multiplayer game.
+
+However, if your Render workspace is suspended for unpaid invoices, Render will not let you use even free services in that workspace. In that case, do not pay just for this learning prototype. Use the free paths in `FREE_HOSTING.md`.
 
 ### Why Render Fits This Version
 
