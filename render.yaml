@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: okquest-kavaroholdings
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit

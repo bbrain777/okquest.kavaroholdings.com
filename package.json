@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "OBADEMI KINGDOM QUEST family game show web app",
   "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"

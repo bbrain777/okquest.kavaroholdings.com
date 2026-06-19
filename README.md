@@ -60,3 +60,7 @@ http://YOUR-LAPTOP-IP:3000/join.html
 - Scores update live.
 - TV reveals explanation, fact, career link, and life lesson.
 - Final winner and rewards display.
+
+## Production Hosting Note
+
+The app uses Socket.io for live multiplayer rooms. For reliable production play, deploy the Node server to a persistent web service host such as Render. This repo includes `render.yaml` and more detail in `DEPLOYMENT.md`.
