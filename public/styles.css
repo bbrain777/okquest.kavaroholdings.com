@@ -88,6 +88,13 @@ select {
   font-size: 20px;
 }
 
+.demo-note {
+  max-width: 560px;
+  margin: 0 auto 24px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .eyebrow {
   color: var(--blue);
   font-size: 13px;
@@ -171,6 +178,30 @@ select {
 
 .room-card {
   text-align: center;
+}
+
+.status-card {
+  padding: 16px 24px;
+  background: #eefcf4;
+}
+
+.status-card p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.status-card[data-state="checking"] {
+  background: #eef4ff;
+}
+
+.status-card[data-state="warning"] {
+  background: #fff1d6;
+  border-color: #ffd38a;
+}
+
+.status-card[data-state="good"] {
+  background: #eafff4;
+  border-color: #a8f0cf;
 }
 
 .room-code {

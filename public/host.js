@@ -6,8 +6,34 @@ const startButton = document.querySelector("#startButton");
 const revealButton = document.querySelector("#revealButton");
 const nextButton = document.querySelector("#nextButton");
 const endButton = document.querySelector("#endButton");
+const createRoomMessage = document.querySelector("#createRoomMessage");
+const connectionTitle = document.querySelector("#connectionTitle");
+const connectionMessage = document.querySelector("#connectionMessage");
+
+let createRoomTimer;
+
+updateConnectionStatus("Connecting to live game server...", "Please wait a moment while OK Quest prepares the room system.", "checking");
+
+setTimeout(() => {
+  if (!socket.connected) {
+    showRealtimeUnavailable();
+  }
+}, 2500);
 
 createRoomButton.addEventListener("click", () => {
+  if (!socket.connected) {
+    showRealtimeUnavailable();
+    return;
+  }
+
+  createRoomButton.disabled = true;
+  createRoomMessage.textContent = "Creating room...";
+  clearTimeout(createRoomTimer);
+  createRoomTimer = setTimeout(() => {
+    createRoomButton.disabled = false;
+    createRoomMessage.textContent = "Room was not created. Use the local Wi-Fi version for live play, or check the server connection.";
+  }, 5000);
+
   socket.emit("host:createRoom", {
     mode: document.querySelector("#mode").value,
     theme: document.querySelector("#theme").value,
@@ -20,7 +46,23 @@ revealButton.addEventListener("click", () => socket.emit("host:revealAnswer", { 
 nextButton.addEventListener("click", () => socket.emit("host:nextQuestion", { roomCode }));
 endButton.addEventListener("click", () => socket.emit("host:endGame", { roomCode }));
 
+socket.on("connect", () => {
+  updateConnectionStatus("Live game server connected", "You can create a room now. For phone scanning, all devices must be able to reach this same server address.", "good");
+  createRoomButton.disabled = false;
+});
+
+socket.on("disconnect", () => {
+  showRealtimeUnavailable();
+});
+
+socket.on("connect_error", () => {
+  showRealtimeUnavailable();
+});
+
 socket.on("host:roomCreated", (room) => {
+  clearTimeout(createRoomTimer);
+  createRoomButton.disabled = false;
+  createRoomMessage.textContent = "Room created. Players can scan the QR code or enter the room code.";
   roomCode = room.code;
   document.querySelector("#roomPanel").classList.remove("hidden");
   document.querySelector("#roomCode").textContent = room.code;
@@ -104,4 +146,20 @@ function renderTeamScores(scores) {
   document.querySelector("#teamScores").innerHTML = Object.entries(scores).map(([team, score]) => (
     `<li>${team}: <strong>${score}</strong></li>`
   )).join("");
+}
+
+function showRealtimeUnavailable() {
+  createRoomButton.disabled = false;
+  createRoomMessage.textContent = "Live room creation is not connected on this URL.";
+  updateConnectionStatus(
+    "Live multiplayer is not connected here",
+    "If you are using the Vercel link, the button may not create a room because Socket.io needs a persistent server. For the free working version, run npm.cmd start on your laptop and open http://YOUR-LAPTOP-IP:3000 on the TV, then phones can scan the QR code.",
+    "warning"
+  );
+}
+
+function updateConnectionStatus(title, message, state) {
+  connectionTitle.textContent = title;
+  connectionMessage.textContent = message;
+  document.querySelector("#statusPanel").dataset.state = state;
 }

@@ -13,6 +13,11 @@
     </header>
 
     <main class="host-grid">
+      <section class="panel wide status-card" id="statusPanel">
+        <strong id="connectionTitle">Connecting to live game server...</strong>
+        <p id="connectionMessage">Please wait a moment while OK Quest prepares the room system.</p>
+      </section>
+
       <section class="panel" id="setupPanel">
         <h1>Create Game Room</h1>
         <label>Game Mode
@@ -33,6 +38,7 @@
           </select>
         </label>
         <button class="button primary" id="createRoomButton">Create Room</button>
+        <p class="message" id="createRoomMessage"></p>
       </section>
 
       <section class="panel room-card hidden" id="roomPanel">
