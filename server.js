@@ -16,6 +16,7 @@ let rewards = readJson("rewards.json", []);
 const badges = readJson("badges.json", []);
 const rooms = new Map();
 const generatedCategories = ["Maths", "Science", "Technology", "Life Skills", "Moral Lessons"];
+const globalQuestionHistory = new Set();
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -50,6 +51,7 @@ io.on("connection", (socket) => {
       currentQuestion: null,
       questionIndex: 0,
       usedQuestionIds: new Set(),
+      usedQuestionPrompts: new Set(),
       state: "lobby",
       createdAt: new Date().toISOString()
     };
@@ -112,6 +114,7 @@ io.on("connection", (socket) => {
     room.state = "playing";
     room.questionIndex = 0;
     room.usedQuestionIds = new Set();
+    room.usedQuestionPrompts = new Set();
     sendNextQuestion(room);
   });
 
@@ -212,14 +215,7 @@ function sendNextQuestion(room) {
     player.answeredCurrent = false;
   });
 
-  const available = questions.filter((question) => !room.usedQuestionIds.has(question.id));
-  const question = available.length
-    ? available[Math.floor(Math.random() * available.length)]
-    : generateQuestion(room);
-
-  if (question.id) {
-    room.usedQuestionIds.add(question.id);
-  }
+  const question = generateFreshQuestion(room);
 
   room.currentQuestion = question;
 
@@ -273,18 +269,41 @@ function clean(value) {
 
 function normalizeRewards(items) {
   const defaults = [
-    { position: 1, reward: "Champion prize" },
-    { position: 2, reward: "Second place prize" },
-    { position: 3, reward: "Third place prize" }
+    { position: 1, avatar: "Trophy", reward: "Champion prize" },
+    { position: 2, avatar: "Medal", reward: "Second place prize" },
+    { position: 3, avatar: "Star", reward: "Third place prize" }
   ];
 
   return defaults.map((fallback, index) => {
     const item = items[index] || {};
     return {
       position: fallback.position,
+      avatar: clean(item.avatar) || fallback.avatar,
       reward: clean(item.reward) || fallback.reward
     };
   });
+}
+
+function generateFreshQuestion(room) {
+  let question = null;
+
+  for (let attempt = 0; attempt < 30; attempt += 1) {
+    question = generateQuestion(room);
+    const key = questionKey(question);
+
+    if (!room.usedQuestionPrompts.has(key) && !globalQuestionHistory.has(key)) {
+      room.usedQuestionPrompts.add(key);
+      globalQuestionHistory.add(key);
+      trimGlobalQuestionHistory();
+      return question;
+    }
+  }
+
+  question = generateMathQuestion(room.questionIndex + randomInt(1, 20));
+  room.usedQuestionPrompts.add(questionKey(question));
+  globalQuestionHistory.add(questionKey(question));
+  trimGlobalQuestionHistory();
+  return question;
 }
 
 function generateQuestion(room) {
@@ -297,6 +316,16 @@ function generateQuestion(room) {
   }
 
   return generateKnowledgeQuestion(category, room.questionIndex);
+}
+
+function questionKey(question) {
+  return `${question.category}:${question.question}`.toLowerCase();
+}
+
+function trimGlobalQuestionHistory() {
+  if (globalQuestionHistory.size <= 500) return;
+  const firstKey = globalQuestionHistory.values().next().value;
+  globalQuestionHistory.delete(firstKey);
 }
 
 function generateMathQuestion(questionIndex) {

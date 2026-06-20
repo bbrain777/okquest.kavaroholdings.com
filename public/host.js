@@ -119,7 +119,7 @@ socket.on("game:finished", ({ leaderboard, teamScores, rewards }) => {
     <p class="eyebrow">Final Results</p>
     <h2>${topThree[0]?.avatar || "🏆"} Champion: ${topThree[0]?.nickname || "No winner yet"}</h2>
     <div class="winner-list">
-      ${topThree.map((player, index) => `<p><strong>${index + 1}. ${player.nickname}</strong> - ${player.score} points - ${rewards[index]?.reward || "Family applause"}</p>`).join("")}
+      ${topThree.map((player, index) => `<p><strong>${index + 1}. ${player.nickname}</strong> - ${player.score} points - ${prizeLabel(rewards[index]) || "Family applause"}</p>`).join("")}
     </div>
   `;
   renderLeaderboard(leaderboard);
@@ -171,9 +171,14 @@ async function loadRewards() {
 }
 
 function renderPrize() {
-  const topPrize = currentRewards[0]?.reward || "Set the winning prize in Parent Admin.";
+  const topPrize = prizeLabel(currentRewards[0]) || "Set the winning prize in Parent Admin.";
   topPrizeSetup.textContent = topPrize;
   topPrizeLobby.textContent = topPrize;
+}
+
+function prizeLabel(reward) {
+  if (!reward) return "";
+  return `${reward.avatar || ""} ${reward.reward || ""}`.trim();
 }
 
 function showRealtimeUnavailable() {

@@ -1,18 +1,28 @@
 const form = document.querySelector("#rewardsForm");
 const message = document.querySelector("#adminMessage");
 const inputs = [
-  document.querySelector("#reward1"),
-  document.querySelector("#reward2"),
-  document.querySelector("#reward3")
+  {
+    avatar: document.querySelector("#avatar1"),
+    reward: document.querySelector("#reward1")
+  },
+  {
+    avatar: document.querySelector("#avatar2"),
+    reward: document.querySelector("#reward2")
+  },
+  {
+    avatar: document.querySelector("#avatar3"),
+    reward: document.querySelector("#reward3")
+  }
 ];
 
 loadRewards();
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const rewards = inputs.map((input, index) => ({
+  const rewards = inputs.map((inputGroup, index) => ({
     position: index + 1,
-    reward: input.value.trim()
+    avatar: inputGroup.avatar.value.trim(),
+    reward: inputGroup.reward.value.trim()
   }));
 
   const response = await fetch("/api/rewards", {
@@ -45,6 +55,7 @@ async function loadRewards() {
 
 function fillRewards(rewards) {
   rewards.slice(0, 3).forEach((reward, index) => {
-    inputs[index].value = reward.reward;
+    inputs[index].avatar.value = reward.avatar || "";
+    inputs[index].reward.value = reward.reward;
   });
 }
