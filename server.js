@@ -12,15 +12,28 @@ const PORT = process.env.PORT || 3000;
 
 const DATA_DIR = path.join(__dirname, "data");
 const questions = readJson("questions.json", []);
-const rewards = readJson("rewards.json", []);
+let rewards = readJson("rewards.json", []);
 const badges = readJson("badges.json", []);
 const rooms = new Map();
 const generatedCategories = ["Maths", "Science", "Technology", "Life Skills", "Moral Lessons"];
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, app: "OK Quest" });
+});
+
+app.get("/api/rewards", (req, res) => {
+  res.json(rewards);
+});
+
+app.post("/api/rewards", (req, res) => {
+  const nextRewards = normalizeRewards(req.body?.rewards || []);
+  rewards = nextRewards;
+  writeJson("rewards.json", rewards);
+  io.emit("rewards:update", rewards);
+  res.json({ ok: true, rewards });
 });
 
 io.on("connection", (socket) => {
@@ -237,6 +250,7 @@ function publicRoom(room, qrCode, joinUrl) {
     players: room.players,
     leaderboard: leaderboard(room),
     teamScores: teamScores(room),
+    rewards,
     qrCode,
     joinUrl
   };
@@ -255,6 +269,22 @@ function teamScores(room) {
 
 function clean(value) {
   return String(value || "").trim();
+}
+
+function normalizeRewards(items) {
+  const defaults = [
+    { position: 1, reward: "Champion prize" },
+    { position: 2, reward: "Second place prize" },
+    { position: 3, reward: "Third place prize" }
+  ];
+
+  return defaults.map((fallback, index) => {
+    const item = items[index] || {};
+    return {
+      position: fallback.position,
+      reward: clean(item.reward) || fallback.reward
+    };
+  });
 }
 
 function generateQuestion(room) {

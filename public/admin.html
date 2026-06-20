@@ -13,9 +13,24 @@
     </header>
     <main class="panel admin-panel">
       <h1>Parent Admin Screen</h1>
-      <p>This first version stores questions, rewards, players, and badges in JSON files inside the <strong>data</strong> folder.</p>
-      <p>The next admin phase will add forms here so parents can create/edit questions and rewards from the browser.</p>
-      <a class="button primary" href="/host.html">Create Game</a>
+      <p>Write the prizes before the game starts. The host screen will show the top prize from the beginning so everyone knows what they are playing for.</p>
+
+      <form id="rewardsForm" class="admin-form">
+        <label>1st Place / Highest Points Prize
+          <input id="reward1" placeholder="Example: 2 chocolates + 2 hours phone time">
+        </label>
+        <label>2nd Place Prize
+          <input id="reward2" placeholder="Example: 1 chocolate + 1 hour phone time">
+        </label>
+        <label>3rd Place Prize
+          <input id="reward3" placeholder="Example: Choose dessert or family activity">
+        </label>
+        <button class="button primary" type="submit">Save Prizes</button>
+        <a class="button" href="/host.html">Create Game</a>
+      </form>
+
+      <p id="adminMessage" class="message"></p>
     </main>
+    <script src="/admin.js"></script>
   </body>
 </html>

@@ -304,6 +304,35 @@ select {
   margin: 32px auto;
 }
 
+.admin-form {
+  margin-top: 24px;
+}
+
+.prize-banner {
+  margin: 0 0 18px;
+  padding: 18px;
+  border: 2px solid #ffe2a3;
+  border-radius: 8px;
+  background: #fff8df;
+}
+
+.prize-banner.compact {
+  margin-bottom: 22px;
+}
+
+.prize-banner strong {
+  display: block;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.prize-banner a {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--blue);
+  font-weight: 800;
+}
+
 @media (max-width: 760px) {
   .host-grid,
   .scoreboards {

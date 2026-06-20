@@ -20,6 +20,11 @@
 
       <section class="panel" id="setupPanel">
         <h1>Create Game Room</h1>
+        <div class="prize-banner compact">
+          <p class="eyebrow">Prize to Win</p>
+          <strong id="topPrizeSetup">Loading prize...</strong>
+          <a href="/admin.html">Edit prizes</a>
+        </div>
         <label>Game Mode
           <select id="mode">
             <option>Family Mode</option>
@@ -52,6 +57,10 @@
         <div class="split-heading">
           <h2>Waiting Lobby</h2>
           <button class="button" id="startButton" disabled>Start Game</button>
+        </div>
+        <div class="prize-banner">
+          <p class="eyebrow">Highest Points Wins</p>
+          <strong id="topPrizeLobby">Loading prize...</strong>
         </div>
         <div class="players" id="players"></div>
       </section>

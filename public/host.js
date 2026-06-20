@@ -9,10 +9,14 @@ const endButton = document.querySelector("#endButton");
 const createRoomMessage = document.querySelector("#createRoomMessage");
 const connectionTitle = document.querySelector("#connectionTitle");
 const connectionMessage = document.querySelector("#connectionMessage");
+const topPrizeSetup = document.querySelector("#topPrizeSetup");
+const topPrizeLobby = document.querySelector("#topPrizeLobby");
 
 let createRoomTimer;
+let currentRewards = [];
 
 updateConnectionStatus("Connecting to live game server...", "Please wait a moment while OK Quest prepares the room system.", "checking");
+loadRewards();
 
 setTimeout(() => {
   if (!socket.connected) {
@@ -73,6 +77,11 @@ socket.on("host:roomCreated", (room) => {
 
 socket.on("room:update", renderRoom);
 
+socket.on("rewards:update", (rewards) => {
+  currentRewards = rewards || [];
+  renderPrize();
+});
+
 socket.on("game:question", ({ questionNumber, question, leaderboard, teamScores }) => {
   revealButton.disabled = false;
   nextButton.disabled = true;
@@ -118,6 +127,8 @@ socket.on("game:finished", ({ leaderboard, teamScores, rewards }) => {
 });
 
 function renderRoom(room) {
+  currentRewards = room.rewards || currentRewards;
+  renderPrize();
   renderPlayers(room.players || []);
   renderLeaderboard(room.leaderboard || []);
   renderTeamScores(room.teamScores || {});
@@ -146,6 +157,23 @@ function renderTeamScores(scores) {
   document.querySelector("#teamScores").innerHTML = Object.entries(scores).map(([team, score]) => (
     `<li>${team}: <strong>${score}</strong></li>`
   )).join("");
+}
+
+async function loadRewards() {
+  try {
+    const response = await fetch("/api/rewards");
+    currentRewards = await response.json();
+    renderPrize();
+  } catch {
+    topPrizeSetup.textContent = "Prize can be set in Parent Admin.";
+    topPrizeLobby.textContent = "Prize can be set in Parent Admin.";
+  }
+}
+
+function renderPrize() {
+  const topPrize = currentRewards[0]?.reward || "Set the winning prize in Parent Admin.";
+  topPrizeSetup.textContent = topPrize;
+  topPrizeLobby.textContent = topPrize;
 }
 
 function showRealtimeUnavailable() {
